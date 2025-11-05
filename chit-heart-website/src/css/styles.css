@@ -1,32 +1,109 @@
-body {
-    background-color: black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+:root{
+  --bg:#000;
+  --heart:#e11b3b;
+  --text:#fff;
 }
 
-.heart {
-    width: 100px;
-    height: 100px;
-    background-color: red;
-    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-    transition: opacity 1s ease;
-    cursor: pointer;
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+  -webkit-font-smoothing:antialiased;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 
-.hidden {
-    opacity: 0;
+.wrap{
+  width:100%;
+  max-width:1000px;
+  padding:5vmin;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:4vmin;
 }
 
-.message {
-    color: white;
-    font-size: 24px;
-    text-align: center;
-    display: none;
+/* heart button */
+.heart-button{
+  background:transparent;
+  border:none;
+  padding:0;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
 }
 
-.show {
-    display: block;
+/* scale heart responsively, huge on phones */
+.heart{
+  width:80vmin;
+  max-width:640px;
+  height:auto;
+  color:var(--heart);
+  fill: currentColor;
+  transform-origin: 50% 60%;
+  will-change: transform, opacity, filter;
+  transition: opacity .6s ease, transform .6s ease, filter .6s ease;
+}
+
+/* beating animation */
+@keyframes beat {
+  0%{ transform: scale(1); }
+  12%{ transform: scale(1.12); }
+  28%{ transform: scale(0.98); }
+  44%{ transform: scale(1.06); }
+  60%{ transform: scale(1); }
+  100%{ transform: scale(1); }
+}
+.beating{
+  animation: beat 0.9s ease-in-out infinite;
+  filter: drop-shadow(0 10px 20px rgba(225,27,59,0.25));
+}
+
+/* dissolve (click) animation */
+.dissolve{
+  animation: heart-dissolve 0.75s forwards ease;
+  filter: blur(0);
+}
+@keyframes heart-dissolve {
+  0%{ opacity:1; transform: scale(1); filter: blur(0px); }
+  40%{ opacity:0.9; transform: scale(1.06) rotate(1deg); filter: blur(1px); }
+  100%{ opacity:0; transform: scale(1.6) rotate(4deg); filter: blur(6px); }
+}
+
+/* message hidden by default */
+.message{
+  color:var(--text);
+  font-size:10vmin;
+  max-width:95%;
+  text-align:center;
+  line-height:1;
+  letter-spacing:0.25rem;
+  opacity:0;
+  transform: translateY(6vh) scale(0.98);
+  transition: opacity .8s cubic-bezier(.2,.9,.2,1), transform .8s cubic-bezier(.2,.9,.2,1);
+  pointer-events:none;
+}
+
+/* show message */
+.message.show{
+  opacity:1;
+  transform: translateY(0) scale(1);
+}
+
+/* cool subtle reveal of letters using text-shadow */
+.message.show{
+  text-shadow: 0 1px 0 rgba(255,255,255,0.02), 0 12px 30px rgba(0,0,0,0.6);
+}
+
+/* smaller phones tweak */
+@media (max-width:420px){
+  .message{ font-size:12vmin; letter-spacing:0.18rem; }
+  .heart{ width:90vmin; }
 }

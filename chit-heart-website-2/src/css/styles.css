@@ -1,0 +1,32 @@
+body {
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.heart {
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    transition: opacity 1s ease;
+    cursor: pointer;
+}
+
+.hidden {
+    opacity: 0;
+}
+
+.message {
+    color: white;
+    font-size: 24px;
+    text-align: center;
+    display: none;
+}
+
+.show {
+    display: block;
+}

@@ -19,8 +19,43 @@ message.style.opacity = '0';
 message.style.transition = 'opacity 1s';
 document.body.appendChild(message);
 
-heart.addEventListener('click', () => {
-    heart.style.transition = 'opacity 1s';
-    heart.style.opacity = '0';
-    message.style.opacity = '1';
+document.addEventListener('DOMContentLoaded', function(){
+  heart.classList.add('beating');
+  const btn = document.getElementById('heartButton');
+  let done = false;
+
+  function reveal(){
+    if(done) return;
+    done = true;
+    // stop beating, play dissolve
+    heart.classList.remove('beating');
+    heart.classList.add('dissolve');
+
+    // after dissolve finishes, hide heart and show message
+    heart.addEventListener('animationend', function onEnd(){
+      heart.removeEventListener('animationend', onEnd);
+      // hide button visually but keep in DOM for accessibility if needed
+      btn.style.display = 'none';
+      message.classList.add('show');
+      message.setAttribute('aria-hidden','false');
+      // small focus for screen readers
+      message.setAttribute('tabindex','-1');
+      message.focus?.();
+    }, { once:true });
+  }
+
+  // accept both touch and click
+  btn.addEventListener('click', reveal, { passive:true });
+  btn.addEventListener('touchstart', function handler(e){
+    e.preventDefault();
+    reveal();
+  }, { once:true });
+
+  // also support keyboard
+  btn.addEventListener('keyup', (e) => {
+    if(e.key === 'Enter' || e.key === ' '){
+      e.preventDefault();
+      reveal();
+    }
+  });
 });
